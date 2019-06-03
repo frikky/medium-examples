@@ -43,7 +43,7 @@ func getDatastore(ctx context.Context, client *datastore.Client, dbname string, 
 
 func main() {
 	// Describe the project
-	projectID := "shuffle-241517"
+	projectID := "yourprojectnamehere"
 	dbname := "medium-test"
 
 	ctx := context.Background()
