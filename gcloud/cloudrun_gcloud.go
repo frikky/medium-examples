@@ -32,8 +32,8 @@ func main() {
 	ctx := context.Background()
 
 	// Defines a the projectname, the servicename to use and an existing image to use
-	projectId := "yourprojectnamehere"
-	imagename := "yourimagenamehere"
+	projectId := "shuffle-241517"
+	imagename := "gcr.io/shuffle-241517/webhook:sha256:875380c5b746f028f73fb892c20d8b40e4eb3c2bde6914af07f8941948dd91ed"
 	servicename := "webhook2"
 
 	// Create a service client like anywhere else
@@ -102,12 +102,13 @@ func main() {
 	}
 }
 
+// Gets a service
 func getService(projectsLocationsService *cloudrun.ProjectsLocationsService, location string) {
 	projectsLocationsServicesGetCall := projectsLocationsService.Services.Get(fmt.Sprintf("%s/services/webhook", location))
 
 	service, err := projectsLocationsServicesGetCall.Do()
 	if err != nil {
-		log.Fatalf("Error creating new locationservice: %s", err)
+		log.Println("Error creating new locationservice: %s", err)
 	}
 
 	_ = service
