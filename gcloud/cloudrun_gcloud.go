@@ -30,6 +30,7 @@ func getAllLocations(projectsLocationsService *cloudrun.ProjectsLocationsService
 // https://cloud.google.com/run/docs/reference/rest/
 func main() {
 	ctx := context.Background()
+	projectId := "shuffle-241517"
 
 	// Create a service client like anywhere else
 	apiservice, err := cloudrun.NewService(ctx)
@@ -50,34 +51,34 @@ func main() {
 	// Define the service
 	// Define the service to deploy..
 	// Wtf even is this
-	service := &cloudrun.Service{
-		ApiVersion: "v1alpha1",
+
+	// Metadata initializers
+	tmpservice := &cloudrun.Service{
+		ApiVersion: "serving.knative.dev/v1alpha1",
 		Kind:       "Service",
 		Metadata: &cloudrun.ObjectMeta{
-			Name:      "webhook3",
-			Namespace: "default",
+			Name:            "webhook3",
+			Namespace:       projectId,
+			ResourceVersion: "AAWKf7cmgXg",
 		},
 		Spec: &cloudrun.ServiceSpec{
 			RunLatest: &cloudrun.ServiceSpecRunLatest{
 				Configuration: &cloudrun.ConfigurationSpec{
 					RevisionTemplate: &cloudrun.RevisionTemplate{
 						Metadata: &cloudrun.ObjectMeta{
-							Name:         "Helo",
-							GenerateName: "1",
+							DeletionGracePeriodSeconds: 0,
 						},
 						Spec: &cloudrun.RevisionSpec{
 							Container: &cloudrun.Container{
 								Image: imagename,
-								Name:  "webhook",
-							},
-							Containers: []*cloudrun.Container{
-								&cloudrun.Container{
-									Image: imagename,
-									Name:  "webhook",
+								Resources: &cloudrun.ResourceRequirements{
+									Limits: map[string]string{"memory": "256Mi"},
 								},
+								Stdin:     false,
+								StdinOnce: false,
+								Tty:       false,
 							},
 							ContainerConcurrency: 80,
-							ServingState:         "ACTIVE",
 							TimeoutSeconds:       300,
 						},
 					},
@@ -85,27 +86,30 @@ func main() {
 			},
 		},
 	}
+	_ = tmpservice
 
 	// Deploy the previously described service to all locations
 	// Locations are the same as "parent" in other API calls, AKA:
 	// projects/{projectname}/locations/{locationName}
 	for _, location := range allLocations {
-		projectsLocationsServicesCreateCall := projectsLocationsService.Services.Create(location, service)
-		service, err = projectsLocationsServicesCreateCall.Do()
+		//projectsLocationsServicesGetCall := projectsLocationsService.Services.Get(fmt.Sprintf("%s/services/webhook", location))
+
+		//service, err := projectsLocationsServicesGetCall.Do()
+		//if err != nil {
+		//	log.Fatalf("Error creating new locationservice: %s", err)
+		//}
+
+		////log.Printf("%#v", service.Metadata)
+		//log.Printf("%#v", service.Spec.RunLatest.Configuration.RevisionTemplate.Metadata)
+		//log.Printf("%#v", service.Spec.RunLatest.Configuration.RevisionTemplate.Spec.Container.Resources)
+
+		projectsLocationsServicesCreateCall := projectsLocationsService.Services.Create(location, tmpservice)
+		service, err := projectsLocationsServicesCreateCall.Do()
 		log.Println(service, err)
 		if err != nil {
 			log.Fatalf("Error creating new locationservice: %s", err)
 		}
+
+		log.Printf("%#v", service.Spec)
 	}
-
-	//log.Printf("%#v", projectsLocationsService)
-	//projectsLocationsServicesCreateCall := projectsLocationsService.Services.Create(parent, service)
-	//log.Printf("%#v", projectsLocationsServicesCreateCall)
-
-	//service, err = projectsLocationsServicesCreateCall.Do()
-	//if err != nil {
-	//	log.Println(err)
-	//}
-
-	log.Println(service)
 }
