@@ -32,9 +32,9 @@ func main() {
 	ctx := context.Background()
 
 	// Defines a the projectname, the servicename to use and an existing image to use
-	projectId := "shuffle-241517"
-	imagename := "gcr.io/shuffle-241517/webhook:sha256:875380c5b746f028f73fb892c20d8b40e4eb3c2bde6914af07f8941948dd91ed"
-	servicename := "webhook2"
+	projectId := ""
+	imagename := ""
+	servicename := "webhook"
 
 	// Create a service client like anywhere else
 	apiservice, err := cloudrun.NewService(ctx)
