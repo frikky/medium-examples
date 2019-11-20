@@ -1,9 +1,10 @@
-# Here goes stuff that I use in my blogposts :)
+# Blogposts @Frikkylikeme
+Medium: https://medium.com/@Frikkylikeme
 
-## Topics
-* Automation & Orchestration
-* GCP implementations
-* Security
+## Topics I talk about
 * Programming (Golang / Python)
+* Google cloud platform & Firebase
+* Automation & Orchestration
 * Oauth2
+* Security
 * Frontend & Backend
