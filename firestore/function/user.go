@@ -1,4 +1,4 @@
-package main
+package user
 
 import (
 	"context"
@@ -39,7 +39,7 @@ func init() {
 	ctx := context.Background()
 	var err error
 	// FIXME - add your username in here
-	client, err = firestore.NewClient(ctx, "medium-77273")
+	client, err = firestore.NewClient(ctx, "YOUR-PROJECT")
 	if err != nil {
 		log.Fatalf("Firestore: %v", err)
 	}
@@ -80,42 +80,4 @@ func HandleUserChange(ctx context.Context, e FirestoreEvent) error {
 
 	log.Printf("User successfully changed from %s to %s", newFields.Username.StringValue, oldFields.Username.StringValue)
 	return nil
-}
-
-func main() {
-	ctx := context.Background()
-	firestoreEvent := FirestoreEvent{
-		Value: FirestoreValue{
-			Fields: User{
-				Username: rollback.StringValue{
-					StringValue: "asd",
-				},
-				Email: rollback.StringValue{
-					StringValue: "asd",
-				},
-				DateEdited: rollback.IntegerValue{
-					IntegerValue: "10",
-				},
-			},
-		},
-		OldValue: FirestoreValue{
-			Name: "projects/{YOUR-PROJECT}/databases/(default)/documents/users/asd",
-			Fields: User{
-				Username: rollback.StringValue{
-					StringValue: "asd",
-				},
-				Email: rollback.StringValue{
-					StringValue: "asd",
-				},
-				DateEdited: rollback.IntegerValue{
-					IntegerValue: "10",
-				},
-			},
-		},
-	}
-
-	err := HandleUserChange(ctx, firestoreEvent)
-	if err != nil {
-		log.Printf("Err: %s", err)
-	}
 }
