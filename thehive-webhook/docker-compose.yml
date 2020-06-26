@@ -1,0 +1,29 @@
+version: "2"
+services:
+  elasticsearch:
+    image: elasticsearch:6.8.8
+    ports:
+      - "0.0.0.0:9200:9200"
+    environment:
+      - http.host=0.0.0.0
+      - discovery.type=single-node
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+  cortex:
+    image: thehiveproject/cortex:latest
+    depends_on:
+      - elasticsearch
+    ports:
+      - "0.0.0.0:9001:9001"
+  thehive:
+    image: thehiveproject/thehive:latest
+    depends_on:
+      - elasticsearch
+      - cortex
+    ports:
+      - "0.0.0.0:9000:9000"
+    volumes:
+      - ./application.conf:/etc/thehive/application.conf
+    command: --cortex-port 9001
