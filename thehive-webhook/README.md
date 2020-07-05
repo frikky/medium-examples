@@ -20,3 +20,9 @@ docker-compose up
 6. Check Shuffle whether the webhook executed
 7. ???
 8. Profit!
+
+## Elastic issues:
+```
+docker exec -u 0 -it thehive_elasticsearch_1 curl -XPUT -H "Content-Type: application/json" http://localhost:9200/_cluster/settings -d '{ "transient": { "cluster.routing.allocation.disk.threshold_enabled": false } }'; curl -XPUT -H "Content-Type: application/json" http://localhost:9200/_all/_settings -d '{"index.blocks.read_only_allow_delete": null}'
+curl -XPUT http://localhost:9200/_cluster/settings -d '{ "transient": { "cluster.routing.allocation.disk.threshold_enabled": false } }' -H "Content-Type: application/json"
+```
