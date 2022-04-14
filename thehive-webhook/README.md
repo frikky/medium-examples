@@ -1,6 +1,8 @@
 # TheHive conf
 This is related to part 4 of the Shuffle blogpost series.
 
+[More details on how to use TheHive with Shufle](https://shuffler.io/docs/extensions#thehive)
+
 ## Get started with Webhook testing
 1. Open application.conf
 2. Edit the line url = with your url as such:
